@@ -24,12 +24,20 @@ export default function Album({ onClick }: AlbumProps) {
       <div className="flex flex-col itmes-center justify-center w-fit h-fit">
         {page < albumlist.length && (
           <div className="flex gap-[20px] w-fit h-fit items-center">
-            <div className="w-fit flex justify-center">
-              <Photo
-                img={albumlist[page].img}
-                width={albumlist[page].width || 350}
-              />
-            </div>
+            <ul className="w-[600px] flex justify-center">
+              {albumlist.map((photo, idx) => (
+                <li
+                  key={idx}
+                  className={
+                    idx === page
+                      ? "absolute top-1/2 left-1/2 -translate-x-[calc(50%+300px)] -translate-y-1/2 opacity-100"
+                      : "absolute top-1/2 left-1/2 -translate-x-[calc(50%+300px)]-y-1/2 opacity-0"
+                  }
+                >
+                  <Photo img={photo.img} width={photo.width || 350} />
+                </li>
+              ))}
+            </ul>
             <div className="flex flex-col justify-between h-fit gap-[20px] z-10">
               <div className="p-[20px] rounded-[16px] bg-[#00000070] w-[500px] h-fit text-[20px] flex flex-col gap-[8px]">
                 <div className="flex gap-[8px] w-fll h-fit border-b border-[#808080] py-[8px]">
@@ -126,6 +134,7 @@ function Photo({ img, width }: PhotoProps) {
     <TiltCard useOverlay={true} trigger={isLoaded}>
       <div className="p-[20px_20px_60px_20px] bg-white shadow-lg shrink-0 cursor-pointer">
         <div className="shadow-inner-xl w-fit h-fit overflow-hidden rounded-[10px] shrink-0">
+          {}
           <Image
             src={img}
             alt="photo"

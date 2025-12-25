@@ -68,10 +68,10 @@ export default function Home() {
           />
           <div
             className={`${
-              isOpenAlbum ? "opacity-100" : "opacity-0"
-            } transition-opacity duration-700 ease-out ease-in absolute top-0 left-0 z-20`}
+              isOpenAlbum ? "opacity-100 z-20" : "opacity-0 z-0"
+            } transition-opacity duration-700 ease-out ease-in absolute top-0 left-0`}
           >
-            {isOpenAlbum && <Album onClick={() => setIsOpenAlbum(false)} />}
+            <Album onClick={() => setIsOpenAlbum(false)} />
           </div>
           <MusicPlayer audioRef={audioRef} />
         </div>
