@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useState } from "react";
+import { RefObject, SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import letter_flap from "@/images/letter_flap.png";
 import letter_back from "@/images/letter_back.png";
@@ -9,9 +9,10 @@ import TiltCard from "./TiltCard";
 
 interface LetterProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onLoad: (e: SyntheticEvent<HTMLImageElement>) => void;
   audioRef: RefObject<HTMLAudioElement | null>;
 }
-export default function Letter({ onClick, audioRef }: LetterProps) {
+export default function Letter({ onClick, onLoad, audioRef }: LetterProps) {
   const [open, setOpen] = useState(false);
   const [flapOpen, setFlapOpen] = useState(false);
   const handleopen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -19,6 +20,13 @@ export default function Letter({ onClick, audioRef }: LetterProps) {
     const state = !open;
     setOpen(state);
     setTimeout(() => setFlapOpen(state), 400);
+  };
+
+  const [loadedCount, setLoadedCount] = useState(0);
+  const totalImages = 3; // 이미지 개수
+
+  const handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
+    onLoad(e);
   };
 
   return (
@@ -39,14 +47,15 @@ export default function Letter({ onClick, audioRef }: LetterProps) {
               open ? "rotate-x-180" : "delay-300"
             } ${flapOpen ? "z-0" : "z-3"}`}
           >
-            <Image src={letter_flap} alt="flap" />
+            <Image src={letter_flap} onLoad={handleLoad} alt="flap" />
           </div>
 
           {/* Pocket */}
-          <Image src={letter_back} alt="back" />
+          <Image src={letter_back} onLoad={handleLoad} alt="back" />
           <Image
             src={letter_front}
             alt="front"
+            onLoad={handleLoad}
             className="absolute top-0 z-2"
           />
           <div
