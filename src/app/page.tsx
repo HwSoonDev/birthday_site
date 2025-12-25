@@ -7,10 +7,14 @@ import icedAmericano from "@/images/icedAmericano.png";
 import fork from "@/images/fork.png";
 import candle from "@/images/candle.png";
 import Album from "@/components/features/Album";
-import { useState } from "react";
+import { useRef, useState, Ref } from "react";
+import MusicPlayer from "@/components/features/MusicPayer";
+import { error } from "console";
 
 export default function Home() {
   const [isOpenAlbum, setIsOpenAlbum] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   return (
     <div className="relative flex items-center justify-center w-full h-full overflow-hidden bg-gradient-to-br from-orange-50 to-amber-100">
       <Image
@@ -33,9 +37,20 @@ export default function Home() {
         alt="candle"
         className="min-w-100 min-h-100 w-100 h-100 absolute top-1/2 left-1/2 -translate-x-[calc(50%+330px)] -translate-y-[calc(50%+200px)] rotate-20"
       />
-      <Letter onClick={() => setIsOpenAlbum(true)} />
-      {isOpenAlbum && <Album />}
-      {/* <Album /> */}
+      <Letter
+        audioRef={audioRef}
+        onClick={async () => {
+          setIsOpenAlbum(true);
+        }}
+      />
+      <div
+        className={`${
+          isOpenAlbum ? "opacity-100" : "opacity-0"
+        } transition-opacity duration-700 ease-out ease-in absolute top-0 left-0 z-20`}
+      >
+        {isOpenAlbum && <Album onClick={() => setIsOpenAlbum(false)} />}
+      </div>
+      <MusicPlayer audioRef={audioRef} />
     </div>
   );
 }

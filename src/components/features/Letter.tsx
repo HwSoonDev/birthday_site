@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useState } from "react";
 import Image from "next/image";
 import letter_flap from "@/images/letter_flap.png";
 import letter_back from "@/images/letter_back.png";
@@ -9,18 +9,20 @@ import TiltCard from "./TiltCard";
 
 interface LetterProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  audioRef: RefObject<HTMLAudioElement | null>;
 }
-export default function Letter({ onClick }: LetterProps) {
+export default function Letter({ onClick, audioRef }: LetterProps) {
   const [open, setOpen] = useState(false);
   const [flapOpen, setFlapOpen] = useState(false);
   const handleopen = (e: React.MouseEvent<HTMLDivElement>) => {
+    audioRef.current?.play();
     const state = !open;
     setOpen(state);
     setTimeout(() => setFlapOpen(state), 400);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center select-none w-fit h-fit">
+    <div className="flex flex-col items-center justify-center select-none w-fit h-fit z-10">
       <TiltCard>
         <div
           className={`group relative w-80 h-56 cursor-pointer transition-transform outline-none duration-700 ${
@@ -59,7 +61,7 @@ export default function Letter({ onClick }: LetterProps) {
                       transform -translate-x-1/2 transition-all duration-700 ease-in-out overflow-hidden
                       ${
                         open
-                          ? "-translate-y-48 opacity-100 delay-300 h-[180%]"
+                          ? "-translate-y-48 opacity-100 delay-300 h-[190%]"
                           : "translate-y-0 opacity-95 h-[70%]"
                       }`}
           >
@@ -77,6 +79,8 @@ export default function Letter({ onClick }: LetterProps) {
                 <br />
                 たりないけど、これは今年の私からのプレセントです。
                 これからもすっとすっと愛してる、ゆんなんさん。会いたいよ。
+                <br />
+                写真にマウスを乗せると回転します。
               </span>
               <span className="w-full flex justify-end">🍰すんちゃんが</span>
               <button
