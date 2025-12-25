@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, SyntheticEvent, useEffect, useState } from "react";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import TiltCard from "./TiltCard";
@@ -8,9 +8,10 @@ const ic_right = "/icons/right_arrow.svg";
 
 interface AlbumProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onLoad: (e: SyntheticEvent<HTMLImageElement>) => void;
 }
 
-export default function Album({ onClick }: AlbumProps) {
+export default function Album({ onClick, onLoad }: AlbumProps) {
   const [page, setPage] = useState(0);
 
   const handlePage = (d: number) => {
@@ -34,7 +35,11 @@ export default function Album({ onClick }: AlbumProps) {
                       : "absolute top-1/2 left-1/2 -translate-x-[calc(50%+300px)]-y-1/2 opacity-0"
                   }
                 >
-                  <Photo img={photo.img} width={photo.width || 350} />
+                  <Photo
+                    img={photo.img}
+                    width={photo.width || 350}
+                    onLoad={onLoad}
+                  />
                 </li>
               ))}
             </ul>
@@ -116,9 +121,10 @@ export default function Album({ onClick }: AlbumProps) {
 interface PhotoProps {
   img: string;
   width: number;
+  onLoad: (e: SyntheticEvent<HTMLImageElement>) => void;
 }
 
-function Photo({ img, width }: PhotoProps) {
+function Photo({ img, width, onLoad }: PhotoProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -128,6 +134,11 @@ function Photo({ img, width }: PhotoProps) {
   const style = {
     width,
     minWidth: width,
+  };
+
+  const handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
+    onLoad(e);
+    setIsLoaded(true);
   };
 
   return (
@@ -141,7 +152,7 @@ function Photo({ img, width }: PhotoProps) {
             width={1000}
             height={1000}
             style={style}
-            onLoad={() => setIsLoaded(true)}
+            onLoad={handleLoad}
           />
         </div>
       </div>

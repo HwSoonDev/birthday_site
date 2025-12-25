@@ -15,7 +15,7 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [loadedCount, setLoadedCount] = useState(0);
-  const totalImages = 7; // 이미지 개수
+  const totalImages = 4 + 3 + 8; // 이미지 개수 (배경 + 편지 봉투 + 앨범)
 
   const handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     setLoadedCount((prev) => prev + 1);
@@ -71,7 +71,7 @@ export default function Home() {
               isOpenAlbum ? "opacity-100 z-20" : "opacity-0 z-0"
             } transition-opacity duration-700 ease-out ease-in absolute top-0 left-0`}
           >
-            <Album onClick={() => setIsOpenAlbum(false)} />
+            <Album onClick={() => setIsOpenAlbum(false)} onLoad={handleLoad} />
           </div>
           <MusicPlayer audioRef={audioRef} />
         </div>
